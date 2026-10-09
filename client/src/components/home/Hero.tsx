@@ -12,7 +12,7 @@ export default function Hero() {
 
         {/* Badge */}
         <span className="inline-block bg-indigo-100 text-indigo-600 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-          New Collection 2026
+          New Collection 2027
         </span>
 
         <h1 className="text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">

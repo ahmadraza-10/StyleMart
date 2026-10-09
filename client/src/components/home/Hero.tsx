@@ -16,7 +16,7 @@ export default function Hero() {
         </span>
 
         <h1 className="text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
-          Latest <span className="text-indigo-600">Fashion</span> Collection
+          Latest <span className="text-orange-300">Fashion</span> Collection
         </h1>
 
         <p className="mt-5 text-lg text-gray-500 font-medium">
@@ -42,8 +42,8 @@ export default function Hero() {
         <div className="mt-14 flex justify-center gap-12">
           {[
             { value: "100+", label: "Products" },
-            { value: "5k+", label: "Customers" },
-            { value: "4.1★", label: "Rating" },
+            { value: "7k+", label: "Customers" },
+            { value: "5.1★", label: "Rating" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl font-extrabold text-gray-900">{stat.value}</div>

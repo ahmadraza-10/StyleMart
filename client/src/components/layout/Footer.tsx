@@ -21,10 +21,10 @@ export default function Footer() {
        {/* Social Icons */}
 <div className="flex gap-4 mt-6">
   <a href="#" className="text-xs bg-gray-800 hover:bg-indigo-600 hover:text-white text-gray-400 px-3 py-1.5 rounded-full transition-all duration-200">
-    Instagram
+    Instagram 📸
   </a>
   <a href="#" className="text-xs bg-gray-800 hover:bg-indigo-600 hover:text-white text-gray-400 px-3 py-1.5 rounded-full transition-all duration-200">
-    Twitter
+    Twitter 𝕏
   </a>
   <a href="#" className="text-xs bg-gray-800 hover:bg-indigo-600 hover:text-white text-gray-400 px-3 py-1.5 rounded-full transition-all duration-200">
     Facebook

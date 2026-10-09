@@ -1,0 +1,5 @@
+services:
+  my-custom-app:
+    image: aahmadraza1/1st_dockerrepo:client
+    ports:
+      - "8080:3000"

@@ -25,11 +25,11 @@ jobs:
         with:
           context: ./client
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client1
 
       - name: Build and Push Server
         uses: docker/build-push-action@v6
         with:
           context: ./server
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server1

@@ -16,7 +16,7 @@ export default function Hero() {
         </span>
 
         <h1 className="text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
-          Latest <span className="text-indigo-300">Fashion</span> Collection
+          Latest <span className="text-indigo-400">Fashion</span> Collection
         </h1>
 
         <p className="mt-5 text-lg text-gray-500 font-medium">

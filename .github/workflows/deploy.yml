@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+      - dev 
+      - staging 
+      - prod 
+    
 
 jobs:
   build-and-push:

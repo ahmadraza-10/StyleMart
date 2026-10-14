@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+      - dev
+      - staging
+      - prod
 
 jobs:
   build-and-push:
@@ -25,11 +28,11 @@ jobs:
         with:
           context: ./client
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.ref_name }}
 
       - name: Build and Push Server
         uses: docker/build-push-action@v6
         with:
           context: ./server
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.ref_name }}

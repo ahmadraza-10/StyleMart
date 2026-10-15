@@ -43,7 +43,7 @@ export default function Hero() {
           {[
             { value: "100+", label: "Products" },
             { value: "7k+", label: "Customers" },
-            { value: "5.2★", label: "Rating" },
+            { value: "5.3★", label: "Rating" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl font-extrabold text-gray-900">{stat.value}</div>

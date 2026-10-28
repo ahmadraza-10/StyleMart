@@ -11,8 +11,8 @@ export default function Hero() {
       <div className="relative text-center max-w-3xl px-6">
 
         {/* Badge */}
-        <span className="inline-block bg-orange-100 text-gray-900 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-          New <span className="text-green-700">Collection</span>2026
+        <span className="inline-block bg-orange-50 text-green-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
+          New Collection 2026
         </span>
 
         <h1 className="text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">

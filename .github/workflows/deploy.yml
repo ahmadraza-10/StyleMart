@@ -1,14 +1,13 @@
 
-name: Build and Push Docker Images
+name: Build, Push and Deploy Docker Images
 
 on:
   push:
     branches:
       - main
-      - dev 
-      - staging 
-      - prod 
-    
+      - dev
+      - staging
+      - prod
 
 jobs:
   build-and-push:
@@ -37,3 +36,34 @@ jobs:
           context: ./server
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.ref_name }}
+
+  deploy-to-ec2:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_PUB_IP }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-main
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-main
+
+            docker stop stylemart-client stylemart-server || true
+            docker rm stylemart-client stylemart-server || true
+
+            docker run -d \
+              --name stylemart-client \
+              --restart unless-stopped \
+              -p 5173:5173 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-main
+
+            docker run -d \
+              --name stylemart-server \
+              --restart unless-stopped \
+              -p 5174:5173 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-main

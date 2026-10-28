@@ -59,7 +59,7 @@ jobs:
             docker run -d \
               --name stylemart-client \
               --restart unless-stopped \
-              -p 5173:5173 \
+              -p 70:5173 \
               ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-main
 
             docker run -d \

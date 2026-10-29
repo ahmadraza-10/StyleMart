@@ -1,4 +1,4 @@
-```yaml
+
 name: Build, Push and Deploy Docker Images
 
 on:
@@ -13,12 +13,16 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    outputs:
+      sha: ${{ steps.vars.outputs.sha }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set Short Git SHA
-        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_ENV
+      - name: Set Short SHA
+        id: vars
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -32,7 +36,7 @@ jobs:
           context: ./client
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ env.SHORT_SHA }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ steps.vars.outputs.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.ref_name }}
 
       - name: Build and Push Server
@@ -41,7 +45,7 @@ jobs:
           context: ./server
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ env.SHORT_SHA }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ steps.vars.outputs.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.ref_name }}
 
   deploy-to-ec2:
@@ -57,8 +61,8 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.sha }}
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.sha }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ needs.build-and-push.outputs.sha }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ needs.build-and-push.outputs.sha }}
 
             docker rm -f stylemart-client stylemart-server || true
 
@@ -66,11 +70,10 @@ jobs:
               --name stylemart-client \
               --restart unless-stopped \
               -p 70:3000 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.sha }}
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ needs.build-and-push.outputs.sha }}
 
             docker run -d \
               --name stylemart-server \
               --restart unless-stopped \
               -p 5174:5173 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.sha }}
-```
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ needs.build-and-push.outputs.sha }}

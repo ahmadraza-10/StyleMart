@@ -28,14 +28,18 @@ jobs:
         with:
           context: ./client
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.ref_name }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.ref_name }}
 
       - name: Build and Push Server
         uses: docker/build-push-action@v6
         with:
           context: ./server
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.ref_name }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.ref_name }}
 
   deploy-to-ec2:
     needs: build-and-push
@@ -50,20 +54,19 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-main
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-main
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.sha }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.sha }}
 
-            docker stop stylemart-client stylemart-server || true
-            docker rm stylemart-client stylemart-server || true
+            docker rm -f stylemart-client stylemart-server || true
 
             docker run -d \
               --name stylemart-client \
               --restart unless-stopped \
               -p 70:3000 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-main
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:client-${{ github.sha }}
 
             docker run -d \
               --name stylemart-server \
               --restart unless-stopped \
               -p 5174:5173 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-main
+              ${{ secrets.DOCKERHUB_USERNAME }}/1st_dockerrepo:server-${{ github.sha }}

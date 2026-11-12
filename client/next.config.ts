@@ -1,11 +1,14 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: "/stylemart",
+
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com", // allows all domains (good for development)
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "http",
